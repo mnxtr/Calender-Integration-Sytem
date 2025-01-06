@@ -1,8 +1,18 @@
 import urllib.request
 import pdftables_api
 #fetching the pdf from the nsu site  
-pdf_path = "http://www.northsouth.edu/newassets/images/5-240.AcademicCalendarSpring%202021.pdf"
+pdf_path = "https://www.northsouth.edu/newassets/images/Registrs%20Office/academiccalendar-spring-2025-30-dec-2025.pdf"
 def download_file(download_url, filename):
+    """
+    Downloads a file from the given URL and saves it as a PDF.
+
+    Args:
+        download_url (str): The URL from which to retrieve the file.
+        filename (str): The base name used for the saved PDF file (without extension).
+
+    Returns:
+        None
+    """
     response = urllib.request.urlopen(download_url)    
     file = open(filename + ".pdf", 'wb')
     file.write(response.read())
