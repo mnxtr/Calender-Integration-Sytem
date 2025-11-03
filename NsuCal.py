@@ -24,26 +24,25 @@ def download_file(download_url: str, filename: str, chunk_size: int = 8192) -> b
         IOError: If there's a file writing error.
     """
     try:
-        response = urllib.request.urlopen(download_url, timeout=30)
-        
-        # Check if the request was successful
-        if response.status != 200:
-            print(f"Error: Server returned status code {response.status}")
-            return False
-        
-        # Use context manager to ensure file is properly closed
-        output_path = filename + ".pdf"
-        with open(output_path, 'wb') as file:
-            # Download in chunks for better memory efficiency
-            while True:
-                chunk = response.read(chunk_size)
-                if not chunk:
-                    break
-                file.write(chunk)
-        
-        response.close()
-        print(f"Successfully downloaded {output_path}")
-        return True
+        # Use context manager for response to ensure it's always closed
+        with urllib.request.urlopen(download_url, timeout=30) as response:
+            # Check if the request was successful
+            if response.status != 200:
+                print(f"Error: Server returned status code {response.status}")
+                return False
+            
+            # Use context manager to ensure file is properly closed
+            output_path = filename + ".pdf"
+            with open(output_path, 'wb') as file:
+                # Download in chunks for better memory efficiency
+                while True:
+                    chunk = response.read(chunk_size)
+                    if not chunk:
+                        break
+                    file.write(chunk)
+            
+            print(f"Successfully downloaded {output_path}")
+            return True
         
     except urllib.error.URLError as e:
         print(f"Network error downloading file: {e}")
